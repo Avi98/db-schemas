@@ -6,6 +6,7 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "incremental": true,
+    "noUnusedLocals":false,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
