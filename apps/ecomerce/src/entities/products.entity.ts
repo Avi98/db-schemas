@@ -11,15 +11,15 @@ import { Cart } from './carts.entity';
 
 @Entity()
 export class Products {
-  @ManyToOne(() => Seller, (seller) => seller.products)
+  @PrimaryGeneratedColumn()
+  id: string;
+
+  @ManyToOne(() => Seller, (seller) => seller.products, { cascade: true })
   seller: Seller;
 
   @JoinTable()
   @ManyToMany(() => Cart, (carts) => carts.products)
   carts: Cart[];
-
-  @PrimaryGeneratedColumn()
-  id: string;
 
   @Column()
   product_name: string;

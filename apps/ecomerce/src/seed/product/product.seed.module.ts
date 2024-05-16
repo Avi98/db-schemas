@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DatabaseProviderModule } from '../../database-provider/database-provider.module';
 import { ProductSeedService } from './product.seed.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Products } from '../../entities/products.entity';
 
 @Module({
-  imports: [DatabaseProviderModule],
+  imports: [TypeOrmModule.forFeature([Products])],
   providers: [ProductSeedService],
+  exports: [ProductSeedService],
 })
-export class SeedModule {}
+export class ProductSeedModule {}

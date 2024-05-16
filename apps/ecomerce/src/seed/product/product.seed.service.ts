@@ -11,13 +11,16 @@ export class ProductSeedService {
     private readonly productRepository: Repository<Products>,
   ) {}
 
+  clear() {
+    return this.productRepository.delete({});
+  }
+
   getData(count: number) {
     return Promise.all(
       Array(count)
         .fill('')
         .map(() => {
-          const product: Products = {
-            id: faker.string.uuid(),
+          const product = {
             category: faker.commerce.productAdjective(),
             type: faker.commerce.department(),
             product_name: faker.commerce.productName(),
@@ -28,5 +31,21 @@ export class ProductSeedService {
           return this.productRepository.create(product);
         }),
     );
+  }
+
+  async insertData(products: Products[]) {
+    for (const product of products) {
+      await this.productRepository
+        .createQueryBuilder('product')
+        .insert()
+        .values({
+          carts: product.carts,
+          category: product.category,
+          product_name: product.product_name,
+          seller: product.seller,
+          type: product.type,
+        })
+        .execute();
+    }
   }
 }

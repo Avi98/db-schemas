@@ -26,4 +26,18 @@ export class SellerSeedService {
         }),
     );
   }
+
+  insertData(data: Seller[]) {
+    return this.sellerRepository.insert(data);
+  }
+
+  getRandomSeller(sellers: Seller[]) {
+    return faker.helpers.arrayElement(sellers);
+  }
+
+  clear() {
+    return this.sellerRepository.query(
+      `TRUNCATE public.seller RESTART IDENTITY CASCADE;`,
+    );
+  }
 }

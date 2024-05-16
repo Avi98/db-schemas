@@ -22,8 +22,7 @@ export class OrderSeedService {
       Array(count)
         .fill('')
         .map(() => {
-          const order: Order = {
-            id: faker.string.uuid(),
+          const order = {
             created_date: faker.date.between({ from: firstDay, to: lastDay }),
             updated_date: new Date(),
             cart: null,
@@ -33,5 +32,40 @@ export class OrderSeedService {
           return this.orderRepository.create(order);
         }),
     );
+  }
+
+  async orderBelongsToCustomer(order: Order, userId: string) {
+    const userOrder = await this.orderRepository.findOne({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    if (userOrder) {
+      return true;
+    }
+    return false;
+  }
+
+  clear() {
+    return this.orderRepository.query(
+      `TRUNCATE public.order RESTART IDENTITY CASCADE`,
+    );
+  }
+
+  getOrderByCartId(cartId: string) {
+    return this.orderRepository.findOne({
+      where: {
+        cart: {
+          id: cartId,
+        },
+      },
+    });
+  }
+
+  saveOrders(orders: Order[]) {
+    return this.orderRepository.insert(orders);
   }
 }

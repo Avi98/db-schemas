@@ -1,9 +1,6 @@
 import { PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export abstract class User {
-  @PrimaryGeneratedColumn()
-  id: string;
-
   @Column({ type: 'varchar' })
   first_name: string;
 

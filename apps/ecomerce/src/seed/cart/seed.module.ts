@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DatabaseProviderModule } from '../../database-provider/database-provider.module';
 import { CartSeedService } from './cart.seed.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cart } from '../../entities/carts.entity';
 
 @Module({
-  imports: [DatabaseProviderModule],
+  imports: [TypeOrmModule.forFeature([Cart])],
   providers: [CartSeedService],
+  exports: [CartSeedService],
 })
-export class SeedModule {}
+export class CartSeedModule {}

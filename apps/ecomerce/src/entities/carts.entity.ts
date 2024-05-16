@@ -14,7 +14,7 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToOne(() => Customer, (user) => user.cart)
+  @OneToOne(() => Customer, (user) => user.cart, { cascade: true })
   user: Customer;
 
   @ManyToMany(() => Products, (products) => products.carts)

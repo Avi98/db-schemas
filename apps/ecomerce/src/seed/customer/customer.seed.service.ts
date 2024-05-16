@@ -26,4 +26,36 @@ export class CustomerSeedService {
         }),
     );
   }
+
+  async insertData(customers: Customer[]): Promise<Customer[]> {
+    for (const customer of customers) {
+      await this.customerRepository
+        .createQueryBuilder('customer')
+        .insert()
+        .values([
+          {
+            orders: customer.orders,
+            cart: customer.cart,
+            email: customer.email,
+            first_name: customer.first_name,
+            last_name: customer.last_name,
+          },
+        ])
+        .execute();
+    }
+    return await this.customerRepository
+      .createQueryBuilder()
+      .select()
+      .execute();
+  }
+
+  clear() {
+    return this.customerRepository.query(
+      `TRUNCATE public.customer RESTART IDENTITY CASCADE`,
+    );
+  }
+
+  randomUsers(users: Customer[]) {
+    return faker.helpers.arrayElement(users);
+  }
 }
