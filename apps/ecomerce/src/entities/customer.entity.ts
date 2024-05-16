@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user';
 import { Cart } from './carts.entity';
 import { Order } from './order.entity';
@@ -12,6 +12,6 @@ export class Customer extends User {
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
 
-  @ManyToOne(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user)
   orders: Order;
 }

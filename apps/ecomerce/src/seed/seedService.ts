@@ -5,11 +5,11 @@ import { CustomerSeedService } from './customer/customer.seed.service';
 import { SellerSeedService } from './seller/seller.seed.service';
 import { CartSeedService } from './cart/cart.seed.service';
 
-const TOTAL_CUSTOMER = 10;
-const TOTAL_SELLER = 7;
-const TOTAL_ORDER = 8;
-const TOTAL_CART = 9;
-const TOTAL_PRODUCT = 20;
+const TOTAL_CUSTOMER = 90_000;
+const TOTAL_SELLER = 70_000;
+const TOTAL_ORDER = 20_000;
+const TOTAL_CART = 40_000;
+const TOTAL_PRODUCT = 20_000;
 
 @Injectable()
 export class SeedServiceService {

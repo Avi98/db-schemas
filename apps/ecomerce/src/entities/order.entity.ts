@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Customer } from './customer.entity';
 import { Cart } from './carts.entity';
@@ -14,10 +16,11 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToMany(() => Customer, (user) => user.orders, { cascade: true })
+  @ManyToOne(() => Customer, (user) => user.orders, { cascade: true })
   user: Customer;
 
-  @OneToOne(() => Cart, (cart) => cart.order)
+  @OneToOne(() => Cart)
+  @JoinColumn()
   cart: Cart;
 
   @CreateDateColumn()

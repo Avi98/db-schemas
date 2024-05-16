@@ -63,15 +63,6 @@ export class CartSeedService {
         //@ts-ignore
         .values({ productsId: product.Products_id, cartId: cartId })
         .execute();
-
-      // await this.cartRepository
-      //   .createQueryBuilder()
-      //   .update()
-      //   .set({
-      //     products: cart.products,
-      //   })
-      //   .where('id:id', { id: cart.id })
-      //   .execute();
     }
   }
   getRandomCarts(carts: Cart[]) {
