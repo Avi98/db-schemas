@@ -17,7 +17,7 @@ export class Products {
   @ManyToOne(() => Seller, (seller) => seller.products, { cascade: true })
   seller: Seller;
 
-  @JoinTable()
+  @JoinTable({ name: 'product_cart_map' })
   @ManyToMany(() => Cart, (carts) => carts.products)
   carts: Cart[];
 

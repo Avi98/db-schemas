@@ -68,26 +68,30 @@ export class SeedServiceService {
         cart.user = this.customerSeedService.randomUsers(savedCustomers);
       });
 
-      const savedCarts = await this.cartSeedService.insertData(carts);
-
       products.forEach((product) => {
-        product.carts = this.cartSeedService.getRandomCarts(savedCarts);
-        product.seller = this.sellerSeedService.getRandomSeller(seller);
+        const randomSeller = this.sellerSeedService.getRandomSeller(seller);
+        if (randomSeller.products) {
+          randomSeller.products.push(product);
+        } else {
+          randomSeller.products = [product];
+        }
+
+        product.seller = randomSeller;
         product.category = product.category;
         product.product_name = product.product_name;
         product.type = product.type;
       });
 
-      // for (const cart of carts) {
-      //   cart.order = await this.orderSeedService.getOrderByCartId(cart.id);
-      //   // cart.products = await this.productSeedService.
-      // }
-
-      await this.productSeedService.insertData(products);
+      await this.cartSeedService.insertData(carts);
 
       await this.sellerSeedService.insertData(seller);
+      const allSavedProducts =
+        await this.productSeedService.insertData(products);
+
+      await this.cartSeedService.updateCartProducts(allSavedProducts);
     } catch (error) {
       console.error({ error });
+      throw error;
     }
   }
 }

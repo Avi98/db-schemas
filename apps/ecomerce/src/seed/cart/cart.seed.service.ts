@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 import { Cart } from '../../entities/carts.entity';
+import { Products } from '../../entities/products.entity';
 
 @Injectable()
 export class CartSeedService {
   constructor(
     @InjectRepository(Cart)
     private readonly cartRepository: Repository<Cart>,
+    private readonly dataSource: DataSource,
   ) {}
 
   getData(count: number) {
@@ -35,13 +37,43 @@ export class CartSeedService {
   }
 
   clear() {
-    return this.cartRepository.delete({});
+    return this.cartRepository.query(
+      `TRUNCATE public.cart RESTART IDENTITY CASCADE`,
+    );
   }
 
   getRandomCart(carts: Cart[]) {
     return faker.helpers.arrayElement(carts);
   }
 
+  async updateCartProducts(products: Products[]) {
+    const cartIds = await this.cartRepository
+      .createQueryBuilder()
+      .select('id')
+      .execute();
+
+    for (const { id: cartId } of cartIds) {
+      const product = faker.helpers.arrayElement(products);
+
+      await this.dataSource
+        .createEntityManager()
+        .createQueryBuilder()
+        .insert()
+        .into('product_cart_map', ['productsId', 'cartId'])
+        //@ts-ignore
+        .values({ productsId: product.Products_id, cartId: cartId })
+        .execute();
+
+      // await this.cartRepository
+      //   .createQueryBuilder()
+      //   .update()
+      //   .set({
+      //     products: cart.products,
+      //   })
+      //   .where('id:id', { id: cart.id })
+      //   .execute();
+    }
+  }
   getRandomCarts(carts: Cart[]) {
     return faker.helpers.arrayElements(carts);
   }

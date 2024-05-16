@@ -12,7 +12,9 @@ export class ProductSeedService {
   ) {}
 
   clear() {
-    return this.productRepository.delete({});
+    return this.productRepository.query(
+      `TRUNCATE public.products RESTART IDENTITY CASCADE`,
+    );
   }
 
   getData(count: number) {
@@ -33,7 +35,7 @@ export class ProductSeedService {
     );
   }
 
-  async insertData(products: Products[]) {
+  async insertData(products: Products[]): Promise<Products[]> {
     for (const product of products) {
       await this.productRepository
         .createQueryBuilder('product')
@@ -47,5 +49,9 @@ export class ProductSeedService {
         })
         .execute();
     }
+    return await this.productRepository
+      .createQueryBuilder()
+      .select('')
+      .execute();
   }
 }
