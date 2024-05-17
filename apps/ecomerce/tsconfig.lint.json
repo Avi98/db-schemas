@@ -1,7 +1,12 @@
 {
-  "extends": "@repo/typescript-config/nestjs.json",
+  // "extends": "@repo/typescript-config/nestjs.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "module": "commonjs",
+    "target": "ES2021",
+    "outDir": "./dist",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "baseUrl": "./"
   },
   "include": ["src", "turbo"],
   "exclude": ["node_modules", "dist"]
