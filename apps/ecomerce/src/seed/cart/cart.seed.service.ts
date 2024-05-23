@@ -33,7 +33,12 @@ export class CartSeedService {
         .values({ isActive: cart.isActive })
         .execute();
     }
-    return await this.cartRepository.createQueryBuilder().select().execute();
+    const { entities } = await this.cartRepository
+      .createQueryBuilder()
+      .select()
+      .getRawAndEntities();
+
+    return entities;
   }
 
   clear() {

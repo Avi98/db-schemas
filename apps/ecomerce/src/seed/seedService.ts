@@ -5,10 +5,10 @@ import { CustomerSeedService } from './customer/customer.seed.service';
 import { SellerSeedService } from './seller/seller.seed.service';
 import { CartSeedService } from './cart/cart.seed.service';
 
-const TOTAL_CUSTOMER = 90_000;
-const TOTAL_SELLER = 70_000;
-const TOTAL_ORDER = 20_000;
-const TOTAL_CART = 40_000;
+const TOTAL_CUSTOMER = 9000;
+const TOTAL_SELLER = 7000;
+const TOTAL_ORDER = 2000;
+const TOTAL_CART = 4000;
 const TOTAL_PRODUCT = 20_000;
 
 @Injectable()
@@ -45,28 +45,36 @@ export class SeedServiceService {
       const carts = await this.cartSeedService.getData(TOTAL_CART);
       const products = await this.productSeedService.getData(TOTAL_PRODUCT);
 
-      orders.forEach((order) => {
-        const customer = this.customerSeedService.randomUsers(customers);
-        if (!order.user) {
-          order.user = customer;
-          if (!customer.orders) {
-            customer.orders = order;
-          }
-        }
-        if (!order.cart) {
-          const cart = this.cartSeedService.getRandomCart(carts);
-          order.cart = cart;
-          customer.cart = cart;
-        }
-      });
-
-      await this.orderSeedService.saveOrders(orders);
       const savedCustomers =
         await this.customerSeedService.insertData(customers);
 
       carts.forEach((cart) => {
         cart.user = this.customerSeedService.randomUsers(savedCustomers);
       });
+
+      const savedCart = await this.cartSeedService.insertData(carts);
+
+      orders.forEach((order) => {
+        const customer = this.customerSeedService.randomUsers(savedCustomers);
+        if (!order.user) {
+          order.user = customer;
+        }
+
+        const cart = this.cartSeedService.getRandomCart(savedCart);
+        if (
+          cart?.id &&
+          !order.cart &&
+          !orders.find((pre) => pre?.cart?.id === cart.id)
+        ) {
+          order.cart = cart;
+        }
+      });
+
+      for (const order of orders) {
+        if (order?.cart?.id) {
+          await this.orderSeedService.saveOrders(order);
+        }
+      }
 
       products.forEach((product) => {
         const randomSeller = this.sellerSeedService.getRandomSeller(seller);
@@ -81,8 +89,6 @@ export class SeedServiceService {
         product.product_name = product.product_name;
         product.type = product.type;
       });
-
-      await this.cartSeedService.insertData(carts);
 
       await this.sellerSeedService.insertData(seller);
       const allSavedProducts =
