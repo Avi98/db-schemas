@@ -8,8 +8,8 @@ import { CartSeedService } from './cart/cart.seed.service';
 const TOTAL_CUSTOMER = 9000;
 const TOTAL_SELLER = 7000;
 const TOTAL_ORDER = 2000;
-const TOTAL_CART = 4000;
-const TOTAL_PRODUCT = 20_000;
+const TOTAL_CART = 400;
+const TOTAL_PRODUCT = 80_000;
 
 @Injectable()
 export class SeedServiceService {

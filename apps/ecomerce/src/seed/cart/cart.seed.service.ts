@@ -52,22 +52,49 @@ export class CartSeedService {
   }
 
   async updateCartProducts(products: Products[]) {
-    const cartIds = await this.cartRepository
+    const carts = await this.cartRepository
       .createQueryBuilder()
-      .select('id')
-      .execute();
+      .select('')
+      .getRawAndEntities();
 
-    for (const { id: cartId } of cartIds) {
+    let i = 0;
+    while (i < carts.entities.length) {
+      const random = Math.floor(Math.random() * carts.entities.length);
+      const radomCart = carts.entities[random];
       const product = faker.helpers.arrayElement(products);
 
-      await this.dataSource
-        .createEntityManager()
-        .createQueryBuilder()
-        .insert()
-        .into('product_cart_map', ['productsId', 'cartId'])
-        //@ts-ignore
-        .values({ productsId: product.Products_id, cartId: cartId })
-        .execute();
+      let hasDuplicate = false;
+      try {
+        hasDuplicate = await this.dataSource
+          .createEntityManager()
+          .createQueryBuilder()
+          .select('')
+          .from('product_cart_map', 'prod_cart')
+          .where('prod_cart.productsId = :prodID', {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            prodID: product.Products_id,
+          })
+          .getRawOne();
+      } catch (error) {
+        hasDuplicate = false;
+      }
+
+      if (!hasDuplicate) {
+        await this.dataSource
+          .createEntityManager()
+          .createQueryBuilder()
+          .insert()
+          .into('product_cart_map', ['productsId', 'cartId'])
+          .values({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            productsId: product.Products_id,
+            cartId: radomCart?.id,
+          })
+          .execute();
+      }
+      i++;
     }
   }
   getRandomCarts(carts: Cart[]) {
