@@ -43,10 +43,12 @@ export class CustomerSeedService {
         ])
         .execute();
     }
-    return await this.customerRepository
+    const entities = await this.customerRepository
       .createQueryBuilder()
       .select()
-      .execute();
+      .getRawAndEntities();
+
+    return entities.entities;
   }
 
   clear() {

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -6,7 +6,19 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  hello() {
+    return 'hellow';
+  }
+
+  @Get('/sales-per-day:')
+  getPerDaySales(@Query('date') date: Date) {
+    // return this.appService.getSalesByDate(date);
+  }
+
+  @Get('/sales-max-sale-per-day')
+  async getMaxSalesPerDay() {
+    const val = await this.appService.getMaximumSalePerDay();
+    console.log({ val });
+    return val;
   }
 }

@@ -65,7 +65,7 @@ export class OrderSeedService {
     });
   }
 
-  saveOrders(orders: Order[]) {
+  saveOrders(orders: Order) {
     return this.orderRepository.insert(orders);
   }
 }

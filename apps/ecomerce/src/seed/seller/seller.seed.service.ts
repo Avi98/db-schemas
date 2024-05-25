@@ -28,7 +28,7 @@ export class SellerSeedService {
   }
 
   insertData(data: Seller[]) {
-    return this.sellerRepository.insert(data);
+    return this.sellerRepository.save(data, { chunk: 1000 });
   }
 
   getRandomSeller(sellers: Seller[]) {

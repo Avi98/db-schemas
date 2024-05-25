@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToMany,
   OneToOne,
   JoinColumn,
   ManyToOne,
