@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Message } from "./message.entity";
 
 @Entity()
@@ -9,8 +15,9 @@ export class MessageRecipient {
   @Column()
   recipient_id: string;
 
-  @ManyToOne(() => Message, (message) => message.recipient)
-  message: Message;
+  @ManyToOne(() => Message, (message) => message.messageRecipient)
+  @JoinColumn({ name: "message_id", referencedColumnName: "id" })
+  message!: Message;
 
   @Column({ name: "is_read", type: "boolean", default: false })
   isRead: boolean;

@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserGroup } from "./user_group.entity";
+import { Fellowship } from "./fellowship.entity";
 
 @Entity({ name: "user" })
 export class User {
@@ -16,4 +18,13 @@ export class User {
 
   @Column({ type: "boolean" })
   is_active: boolean;
+
+  @OneToMany(() => Fellowship, (fellowship) => fellowship.follower)
+  follower: Fellowship;
+
+  @OneToMany(() => Fellowship, (fellowship) => fellowship.followed)
+  followed: Fellowship;
+
+  @OneToMany(() => UserGroup, (userGroup) => userGroup.user)
+  userGroup: UserGroup[];
 }
