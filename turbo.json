@@ -13,6 +13,10 @@
       "cache": false,
       "persistent": true
     },
+    "dev-social-media": {
+      "cache": false,
+      "persistent": true
+    },
     "seed": {
       "cache": false
     }

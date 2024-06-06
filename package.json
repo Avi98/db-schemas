@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev-social-media": "turbo dev-social-media",
     "lint": "turbo lint",
     "seed": "turbo run seed --no-cache",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""

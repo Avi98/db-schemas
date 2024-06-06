@@ -1,0 +1,12 @@
+{
+  // "extends": "@repo/typescript-config/nestjs.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2021",
+    "outDir": "./dist",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./"
+  }
+}
